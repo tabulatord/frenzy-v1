@@ -1,0 +1,68 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { validateRegistration, type RegistrationPayload } from "@/lib/registration";
+import { isPreRegistrationClosed } from "@/lib/config";
+
+export async function POST(req: NextRequest) {
+  if (isPreRegistrationClosed()) {
+    return NextResponse.json(
+      { error: "Pre-registration is closed." },
+      { status: 403 }
+    );
+  }
+
+  let data: RegistrationPayload;
+  try {
+    data = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
+
+  const result = validateRegistration(data);
+  if (!result.valid) {
+    return NextResponse.json({ errors: result.errors }, { status: 422 });
+  }
+
+  const supabase = createServerSupabaseClient();
+
+  const { error } = await supabase.from("pre_registrations").insert({
+    first_name: data.first_name.trim(),
+    last_name: data.last_name.trim(),
+    email: data.email.trim().toLowerCase(),
+    phone: data.phone.trim(),
+    date_of_birth: data.date_of_birth,
+    gender: data.gender,
+    country_code: data.country_code,
+    country_name: data.country_name,
+    region: data.region?.trim() || null,
+    city: data.city.trim(),
+    postal_code: data.postal_code?.trim() || null,
+    rating: data.rating,
+    disciplines: data.disciplines,
+    usual_pickleball_location: data.location_not_listed
+      ? null
+      : data.usual_pickleball_location?.trim() || null,
+    location_not_listed: data.location_not_listed,
+    consent_terms: data.consent_terms,
+    consent_marketing: data.consent_marketing,
+    utm_source: data.utm_source || null,
+    utm_medium: data.utm_medium || null,
+    utm_campaign: data.utm_campaign || null,
+    utm_content: data.utm_content || null,
+    utm_term: data.utm_term || null,
+  });
+
+  if (error) {
+    // Postgres unique_violation
+    if (error.code === "23505") {
+      return NextResponse.json(
+        { error: "This email is already pre-registered." },
+        { status: 409 }
+      );
+    }
+    console.error("pre-register insert failed", error);
+    return NextResponse.json({ error: "Could not save your pre-registration." }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true }, { status: 201 });
+}
