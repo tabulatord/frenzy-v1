@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import LegalLayout from "@/components/LegalLayout";
 
-export const metadata: Metadata = { title: "Pre-Registration Terms — FRENZY" };
+export const metadata: Metadata = { title: "Pre-Registration Terms — FPWC" };
 
 export default function TermsPage() {
   return (
     <LegalLayout title="Pre-Registration Terms" updated="August 2026">
       <p>
-        These terms govern your free pre-registration for FRENZY, the Road to Paris 2027
-        amateur pickleball competition. By submitting the pre-registration form, you agree
-        to the terms below.
+        These terms govern your free pre-registration for FPWC (Frenzy Pickleball World
+        Championship), the Road to Paris 2027 amateur pickleball competition. By
+        submitting the pre-registration form, you agree to the terms below.
       </p>
 
       <section>
         <h2 className="text-base font-bold text-black">1. What pre-registration is</h2>
         <p className="mt-2">
           Pre-registration is free and does not require any payment, account creation, or
-          purchase. It expresses your interest in participating in FRENZY and reserves no
+          purchase. It expresses your interest in participating in FPWC and reserves no
           spot, ranking, or guarantee of entry into any future stage of the competition.
         </p>
       </section>
@@ -33,9 +33,9 @@ export default function TermsPage() {
       <section>
         <h2 className="text-base font-bold text-black">3. No payment, no wallet, no purchase</h2>
         <p className="mt-2">
-          FRENZY pre-registration never asks for payment information, a crypto wallet
+          FPWC pre-registration never asks for payment information, a crypto wallet
           connection, or any form of purchase. Any message asking you to pay to
-          pre-register is not from FRENZY.
+          pre-register is not from FPWC.
         </p>
       </section>
 
@@ -52,7 +52,7 @@ export default function TermsPage() {
       <section>
         <h2 className="text-base font-bold text-black">5. Changes</h2>
         <p className="mt-2">
-          FRENZY may update the competition format, categories, timeline, or these terms
+          FPWC may update the competition format, categories, timeline, or these terms
           as the Road to Paris 2027 is built out. We will communicate material changes to
           pre-registered players where reasonably possible.
         </p>
@@ -73,8 +73,8 @@ export default function TermsPage() {
         <h2 className="text-base font-bold text-black">7. Contact</h2>
         <p className="mt-2">
           Questions about these terms? Email{" "}
-          <a href="mailto:hello@frenzy.gg" className="underline">
-            hello@frenzy.gg
+          <a href="mailto:hello@fpwc.gg" className="underline">
+            hello@fpwc.gg
           </a>
           .
         </p>

@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FRENZY — Road to Paris 2027",
+  title: "FPWC — Road to Paris 2027",
   description:
-    "Building the world's largest amateur pickleball competition. Pre-register free — $500,000 prize pool, Road to Paris 2027.",
+    "Frenzy Pickleball World Championship — building the world's largest amateur pickleball competition. Pre-register free — $500,000 prize pool, Road to Paris 2027.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

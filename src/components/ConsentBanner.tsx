@@ -26,7 +26,7 @@ export default function ConsentBanner() {
     <div className="fixed inset-x-0 bottom-16 z-50 border-t border-black/10 bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] sm:bottom-0">
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-3 sm:flex-row sm:justify-between">
         <p className="text-center text-xs text-black/70 sm:text-left">
-          We use cookies to understand traffic and improve FRENZY. Read our{" "}
+          We use cookies to understand traffic and improve FPWC. Read our{" "}
           <a href="/privacy" className="underline">
             Privacy Policy
           </a>

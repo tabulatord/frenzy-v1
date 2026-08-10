@@ -385,7 +385,7 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
             onChange={(e) => update("consent_marketing", e.target.checked)}
             className="mt-0.5 h-4 w-4 accent-black"
           />
-          <span>Keep me updated on FRENZY news, dates, and announcements.</span>
+          <span>Keep me updated on FPWC news, dates, and announcements.</span>
         </label>
       </fieldset>
 

@@ -7,9 +7,12 @@ export default function Hero() {
       />
       <div className="relative mx-auto max-w-3xl">
         <h1 className="text-6xl font-black leading-[0.9] tracking-tight sm:text-8xl">
-          FRENZY
+          FPWC
         </h1>
-        <p className="mt-4 text-sm font-bold uppercase tracking-[0.3em] text-black/70 sm:text-base">
+        <p className="mt-3 text-sm font-bold text-black/60 sm:text-base">
+          Frenzy Pickleball World Championship
+        </p>
+        <p className="mt-2 text-sm font-bold uppercase tracking-[0.3em] text-black/70 sm:text-base">
           Road to Paris 2027
         </p>
         <p className="mt-6 text-4xl font-black tracking-tight sm:text-6xl">

@@ -13,7 +13,7 @@ export default function LegalLayout({
   return (
     <div className="mx-auto max-w-2xl px-5 py-14">
       <Link href="/" className="text-sm font-bold text-black/50 hover:text-black">
-        &larr; FRENZY
+        &larr; FPWC
       </Link>
       <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">{title}</h1>
       <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-black/40">
