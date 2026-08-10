@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Tagline from "@/components/Tagline";
 import RoadSection from "@/components/RoadSection";
+import AndDivider from "@/components/AndDivider";
 import BattleSection from "@/components/BattleSection";
 import CategoriesSection from "@/components/CategoriesSection";
 import RegistrationSection from "@/components/RegistrationSection";
@@ -24,6 +25,7 @@ export default function Home() {
         <Hero />
         <Tagline />
         <RoadSection />
+        <AndDivider />
         <BattleSection />
         <CategoriesSection />
         <RegistrationSection isClosed={closed} />

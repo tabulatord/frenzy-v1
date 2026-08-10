@@ -27,6 +27,9 @@ export default function RoadSection() {
           </div>
         ))}
       </div>
+      <p className="mx-auto mt-8 max-w-md text-center text-sm font-semibold text-white/70">
+        Open to every country. Every player. Everywhere.
+      </p>
     </section>
   );
 }

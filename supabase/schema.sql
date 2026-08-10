@@ -42,7 +42,7 @@ create table if not exists public.pre_registrations (
   constraint pre_registrations_email_unique unique (email),
   constraint pre_registrations_consent_terms_check check (consent_terms is true),
   constraint pre_registrations_rating_check check (
-    rating in ('No Rating', '3.0', '3.5', '4.0', '4.5', '5.0+', 'Pro')
+    rating in ('No Rating', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0+')
   )
 );
 

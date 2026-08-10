@@ -1,4 +1,4 @@
-export const RATINGS = ["No Rating", "3.0", "3.5", "4.0", "4.5", "5.0+", "Pro"] as const;
+export const RATINGS = ["No Rating", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0+"] as const;
 export type Rating = (typeof RATINGS)[number];
 
 export const DISCIPLINES = [
