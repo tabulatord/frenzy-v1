@@ -17,6 +17,11 @@ type Props = {
 // in Google's PlaceAutocompleteElement — keeps the Maps JS bundle out of
 // the initial page load entirely (only visitors who reach this field pay
 // for it), per the perf requirement.
+//
+// The target <div> for the Google element is always mounted (just hidden
+// until ready), never conditionally rendered — the async script load can
+// finish well after the initial render, and a conditionally-rendered div
+// wouldn't exist yet when the "gmp-select" wiring tries to attach to it.
 export default function PlaceAutocompleteInput({
   id,
   value,
@@ -73,8 +78,8 @@ export default function PlaceAutocompleteInput({
       });
   }
 
-  if (!ready) {
-    return (
+  return (
+    <>
       <input
         id={id}
         type="text"
@@ -84,12 +89,12 @@ export default function PlaceAutocompleteInput({
         disabled={disabled}
         onFocus={handleFocus}
         onChange={(e) => onChange(e.target.value)}
+        style={ready ? { display: "none" } : undefined}
       />
-    );
-  }
-
-  // The Google element renders its own boxed input internally, so the
-  // wrapper here only needs to control layout width, not repeat the
-  // border/padding classes used for the plain-input state above.
-  return <div ref={containerRef} className="w-full" />;
+      {/* The Google element renders its own boxed input internally, so the
+          wrapper here only needs to control layout width, not repeat the
+          border/padding classes used for the plain-input state above. */}
+      <div ref={containerRef} className="w-full" style={ready ? undefined : { display: "none" }} />
+    </>
+  );
 }
