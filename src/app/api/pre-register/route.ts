@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { validateRegistration, type RegistrationPayload } from "@/lib/registration";
 import { isPreRegistrationClosed } from "@/lib/config";
+import { sendConfirmationEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   if (isPreRegistrationClosed()) {
@@ -42,6 +43,8 @@ export async function POST(req: NextRequest) {
     usual_pickleball_location: data.location_not_listed
       ? null
       : data.usual_pickleball_location?.trim() || null,
+    usual_pickleball_lat: data.location_not_listed ? null : data.usual_pickleball_lat ?? null,
+    usual_pickleball_lng: data.location_not_listed ? null : data.usual_pickleball_lng ?? null,
     location_not_listed: data.location_not_listed,
     consent_terms: data.consent_terms,
     consent_marketing: data.consent_marketing,
@@ -63,6 +66,17 @@ export async function POST(req: NextRequest) {
     console.error("pre-register insert failed", error);
     return NextResponse.json({ error: "Could not save your pre-registration." }, { status: 500 });
   }
+
+  // Fire after the response is sent so a slow/failing email provider never
+  // delays or breaks the pre-registration itself.
+  after(() =>
+    sendConfirmationEmail({
+      to: data.email.trim().toLowerCase(),
+      firstName: data.first_name.trim(),
+      rating: data.rating,
+      disciplines: data.disciplines,
+    })
+  );
 
   return NextResponse.json({ ok: true }, { status: 201 });
 }

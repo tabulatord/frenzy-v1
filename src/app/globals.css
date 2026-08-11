@@ -31,3 +31,15 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+/* Google PlaceAutocompleteElement theming (gmpx-* custom properties).
+   Best-effort match to the rest of the form's inputs — verify once a
+   real Maps API key is wired up and adjust as needed. */
+.fpwc-place-autocomplete {
+  --gmpx-color-surface: #ffffff;
+  --gmpx-color-on-surface: #0a0a0a;
+  --gmpx-color-primary: #0a0a0a;
+  --gmpx-font-family-base: var(--font-sans), Arial, Helvetica, sans-serif;
+  --gmpx-font-size-base: 1rem;
+  width: 100%;
+}

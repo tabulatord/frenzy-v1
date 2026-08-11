@@ -26,6 +26,8 @@ create table if not exists public.pre_registrations (
   rating text not null,
   disciplines text[] not null default '{}',
   usual_pickleball_location text,
+  usual_pickleball_lat double precision,
+  usual_pickleball_lng double precision,
   location_not_listed boolean not null default false,
 
   -- Consent

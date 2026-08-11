@@ -11,6 +11,7 @@ import {
 } from "@/lib/registration";
 import { captureUtmParams } from "@/lib/utm";
 import { track } from "@/lib/analytics";
+import PlaceAutocompleteInput from "./PlaceAutocompleteInput";
 
 const EMPTY: RegistrationPayload = {
   first_name: "",
@@ -27,6 +28,8 @@ const EMPTY: RegistrationPayload = {
   rating: "",
   disciplines: [],
   usual_pickleball_location: "",
+  usual_pickleball_lat: null,
+  usual_pickleball_lng: null,
   location_not_listed: false,
   consent_terms: false,
   consent_marketing: false,
@@ -324,12 +327,28 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
         </div>
 
         <div id="field-usual_pickleball_location">
-          <input
+          <PlaceAutocompleteInput
             className={inputClass(!!errors.usual_pickleball_location)}
             placeholder="Where do you usually play pickleball?"
             value={data.usual_pickleball_location}
             disabled={data.location_not_listed}
-            onChange={(e) => update("usual_pickleball_location", e.target.value)}
+            onChange={(value) => {
+              if (!started) {
+                setStarted(true);
+                track("form_start");
+              }
+              // Any manual edit invalidates a previously selected place's
+              // coordinates until a new suggestion is picked.
+              setData((d) => ({
+                ...d,
+                usual_pickleball_location: value,
+                usual_pickleball_lat: null,
+                usual_pickleball_lng: null,
+              }));
+            }}
+            onPlaceSelected={({ lat, lng }) => {
+              setData((d) => ({ ...d, usual_pickleball_lat: lat, usual_pickleball_lng: lng }));
+            }}
           />
           <label className="mt-2 flex items-center gap-2 text-sm text-black/70">
             <input
@@ -340,6 +359,8 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
                   ...d,
                   location_not_listed: e.target.checked,
                   usual_pickleball_location: e.target.checked ? "" : d.usual_pickleball_location,
+                  usual_pickleball_lat: e.target.checked ? null : d.usual_pickleball_lat,
+                  usual_pickleball_lng: e.target.checked ? null : d.usual_pickleball_lng,
                 }))
               }
               className="h-4 w-4 accent-black"

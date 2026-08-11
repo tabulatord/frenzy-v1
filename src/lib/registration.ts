@@ -28,6 +28,8 @@ export type RegistrationPayload = {
   rating: string;
   disciplines: string[];
   usual_pickleball_location: string;
+  usual_pickleball_lat: number | null;
+  usual_pickleball_lng: number | null;
   location_not_listed: boolean;
   consent_terms: boolean;
   consent_marketing: boolean;
