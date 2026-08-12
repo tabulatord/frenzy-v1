@@ -9,7 +9,8 @@ import RegistrationSection from "@/components/RegistrationSection";
 import Footer from "@/components/Footer";
 import StickyMobileCta from "@/components/StickyMobileCta";
 import ConsentBanner from "@/components/ConsentBanner";
-import { isPreRegistrationClosed } from "@/lib/config";
+import AssistantWidget from "@/components/AssistantWidget";
+import { isPreRegistrationClosed, SHOW_ASSISTANT } from "@/lib/config";
 
 // Revalidate periodically so the closed-registration state (driven by
 // PREREG_CLOSE_DATE) flips on its own without waiting for a redeploy.
@@ -33,6 +34,7 @@ export default function Home() {
       <Footer />
       {!closed && <StickyMobileCta />}
       <ConsentBanner />
+      {SHOW_ASSISTANT && <AssistantWidget />}
     </>
   );
 }

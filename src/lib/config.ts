@@ -16,3 +16,7 @@ export const PLAYER_COUNT_THRESHOLD = Number(
 
 export const CLOSED_MESSAGE =
   "GLOBAL PRE-REGISTRATION IS NOW CLOSED. We're building the Road to Paris. Next stage coming soon.";
+
+// Off by default until the Anthropic account has billing credits — flip to
+// "true" in Vercel once /api/assistant is confirmed working.
+export const SHOW_ASSISTANT = process.env.NEXT_PUBLIC_SHOW_ASSISTANT === "true";

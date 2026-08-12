@@ -66,3 +66,29 @@ alter table public.pre_registrations enable row level security;
 -- CSV export: use the Supabase Studio Table Editor > pre_registrations >
 -- Export as CSV, or `supabase db dump` / SQL: `copy (select * from
 -- public.pre_registrations) to stdout with csv header`.
+
+-- Site assistant escalation queue (brief section 5.6): questions the
+-- assistant couldn't confidently answer, waiting for Laurent to review,
+-- correct, and send.
+create table if not exists public.assistant_escalations (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  user_email text not null,
+  question text not null,
+  proposed_response text,
+  status text not null default 'pending',
+  sent_response text,
+  resolved_at timestamptz,
+
+  constraint assistant_escalations_status_check check (
+    status in ('pending', 'approved', 'edited', 'dismissed', 'sent')
+  )
+);
+
+create index if not exists assistant_escalations_status_idx
+  on public.assistant_escalations (status, created_at desc);
+
+alter table public.assistant_escalations enable row level security;
+-- Same model as pre_registrations: no public policies, all access via the
+-- service-role key from server-side code (API route insert, Supabase
+-- Studio for manual review/export in the meantime).
