@@ -19,6 +19,9 @@ export default function Hero() {
           <span className="bg-accent px-2">$500,000</span>
           <br className="sm:hidden" /> PRIZE POOL
         </p>
+        <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-black/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-black/60">
+          🔗 Secured on the blockchain
+        </span>
 
         <a
           href="#register"

@@ -13,7 +13,6 @@ export default function Footer() {
             Terms
           </Link>
         </nav>
-        <p className="text-xs text-black/40">Built on Solana</p>
         <p className="text-xs text-black/40">
           &copy; {new Date().getFullYear()} FPWC. All rights reserved.
         </p>
