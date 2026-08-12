@@ -12,7 +12,6 @@ import {
 import { captureUtmParams } from "@/lib/utm";
 import { track } from "@/lib/analytics";
 import PlaceAutocompleteInput from "./PlaceAutocompleteInput";
-import NearbyClubsFinder from "./NearbyClubsFinder";
 
 const EMPTY: RegistrationPayload = {
   first_name: "",
@@ -352,20 +351,17 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
             }}
           />
           {!data.location_not_listed && (
-            <NearbyClubsFinder
-              onSelect={({ description, lat, lng }) => {
-                if (!started) {
-                  setStarted(true);
-                  track("form_start");
-                }
-                setData((d) => ({
-                  ...d,
-                  usual_pickleball_location: description,
-                  usual_pickleball_lat: lat,
-                  usual_pickleball_lng: lng,
-                }));
-              }}
-            />
+            <p className="mt-2 text-xs text-black/50">
+              Not sure where to play?{" "}
+              <a
+                href="https://www.pickleheads.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-accent-dark underline underline-offset-2"
+              >
+                Find courts on Pickleheads ↗
+              </a>
+            </p>
           )}
           <label className="mt-2 flex items-center gap-2 text-sm text-black/70">
             <input
