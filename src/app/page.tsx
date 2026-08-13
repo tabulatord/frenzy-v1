@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import CountriesInRace from "@/components/CountriesInRace";
 import Tagline from "@/components/Tagline";
 import RoadSection from "@/components/RoadSection";
 import AndDivider from "@/components/AndDivider";
@@ -24,6 +25,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <CountriesInRace />
         <Tagline />
         <RoadSection />
         <AndDivider />

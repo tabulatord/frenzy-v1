@@ -11,7 +11,7 @@ export function isPreRegistrationClosed(): boolean {
 
 export const SHOW_PLAYER_COUNT = process.env.NEXT_PUBLIC_SHOW_PLAYER_COUNT === "true";
 export const PLAYER_COUNT_THRESHOLD = Number(
-  process.env.NEXT_PUBLIC_PLAYER_COUNT_THRESHOLD ?? 1000
+  process.env.NEXT_PUBLIC_PLAYER_COUNT_THRESHOLD ?? 10000
 );
 
 export const CLOSED_MESSAGE =

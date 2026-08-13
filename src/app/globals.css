@@ -43,3 +43,26 @@ body {
   --gmpx-font-size-base: 1rem;
   width: 100%;
 }
+
+/* "Countries already in the race" — plays once when a country card first
+   mounts (i.e. genuinely new, not on every poll refresh). */
+@keyframes country-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-country-in {
+  animation: country-in 0.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-country-in {
+    animation: none;
+  }
+}
