@@ -35,9 +35,9 @@ export async function POST(req: NextRequest) {
     gender: data.gender,
     country_code: data.country_code,
     country_name: data.country_name,
-    region: data.region?.trim() || null,
+    region: data.region.trim(),
     city: data.city.trim(),
-    postal_code: data.postal_code?.trim() || null,
+    postal_code: data.postal_code.trim(),
     rating: data.rating,
     disciplines: data.disciplines,
     usual_pickleball_location: data.location_not_listed
@@ -48,6 +48,8 @@ export async function POST(req: NextRequest) {
     location_not_listed: data.location_not_listed,
     consent_terms: data.consent_terms,
     consent_marketing: data.consent_marketing,
+    guardian_email: data.guardian_email?.trim() || null,
+    guardian_consent: data.guardian_consent,
     utm_source: data.utm_source || null,
     utm_medium: data.utm_medium || null,
     utm_campaign: data.utm_campaign || null,
@@ -73,8 +75,8 @@ export async function POST(req: NextRequest) {
     sendConfirmationEmail({
       to: data.email.trim().toLowerCase(),
       firstName: data.first_name.trim(),
-      rating: data.rating,
-      disciplines: data.disciplines,
+      countryCode: data.country_code,
+      countryName: data.country_name,
     })
   );
 

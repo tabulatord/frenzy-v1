@@ -7,6 +7,8 @@ import {
   GENDERS,
   RATINGS,
   RegistrationPayload,
+  computeAge,
+  isMinor,
   validateRegistration,
 } from "@/lib/registration";
 import { captureUtmParams } from "@/lib/utm";
@@ -33,6 +35,8 @@ const EMPTY: RegistrationPayload = {
   location_not_listed: false,
   consent_terms: false,
   consent_marketing: false,
+  guardian_email: "",
+  guardian_consent: false,
   website: "",
 };
 
@@ -49,6 +53,7 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [started, setStarted] = useState(false);
   const [isEligibleFor45, setIsEligibleFor45] = useState(false);
+  const [isUnder18, setIsUnder18] = useState(false);
 
   useEffect(() => {
     // One-time sync from the URL / sessionStorage on mount — not
@@ -68,9 +73,10 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
       track("form_start");
     }
     if (key === "date_of_birth") {
-      const dob = new Date(value as string);
-      const age = (Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+      const dobStr = value as string;
+      const age = computeAge(dobStr);
       setIsEligibleFor45(age >= 45);
+      setIsUnder18(isMinor(dobStr));
     }
     setData((d) => ({ ...d, [key]: value }));
   }
@@ -231,6 +237,45 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
         </div>
       </fieldset>
 
+      {isUnder18 && (
+        <fieldset className="space-y-4 rounded-2xl border-2 border-black/15 bg-black/[0.02] p-4">
+          <legend className="mb-1 px-1 text-xs font-bold uppercase tracking-[0.2em] text-black/50">
+            Parent / guardian
+          </legend>
+          <p className="text-sm text-black/60">
+            Players under 18 need a parent or guardian to authorize this pre-registration.
+          </p>
+          <div id="field-guardian_email">
+            <input
+              className={inputClass(!!errors.guardian_email)}
+              type="email"
+              placeholder="Parent / guardian email"
+              value={data.guardian_email}
+              onChange={(e) => update("guardian_email", e.target.value)}
+            />
+            {errors.guardian_email && (
+              <p className="mt-1 text-xs text-red-600">{errors.guardian_email}</p>
+            )}
+          </div>
+          <div id="field-guardian_consent">
+            <label className="flex items-start gap-3 text-sm">
+              <input
+                type="checkbox"
+                checked={data.guardian_consent}
+                onChange={(e) => update("guardian_consent", e.target.checked)}
+                className="mt-0.5 h-4 w-4 accent-black"
+              />
+              <span>
+                I confirm my parent/guardian is aware of and authorizes this registration.
+              </span>
+            </label>
+            {errors.guardian_consent && (
+              <p className="mt-1 text-xs text-red-600">{errors.guardian_consent}</p>
+            )}
+          </div>
+        </fieldset>
+      )}
+
       <fieldset className="space-y-4">
         <legend className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-black/50">
           Location
@@ -254,12 +299,15 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <input
-            className={inputClass(false)}
-            placeholder="Region / State (optional)"
-            value={data.region}
-            onChange={(e) => update("region", e.target.value)}
-          />
+          <div id="field-region">
+            <input
+              className={inputClass(!!errors.region)}
+              placeholder="Region / State"
+              value={data.region}
+              onChange={(e) => update("region", e.target.value)}
+            />
+            {errors.region && <p className="mt-1 text-xs text-red-600">{errors.region}</p>}
+          </div>
           <div id="field-city">
             <input
               className={inputClass(!!errors.city)}
@@ -271,12 +319,15 @@ export default function RegistrationForm({ onSuccess }: { onSuccess: () => void 
           </div>
         </div>
 
-        <input
-          className={inputClass(false)}
-          placeholder="Postal code (optional)"
-          value={data.postal_code}
-          onChange={(e) => update("postal_code", e.target.value)}
-        />
+        <div id="field-postal_code">
+          <input
+            className={inputClass(!!errors.postal_code)}
+            placeholder="Postal code"
+            value={data.postal_code}
+            onChange={(e) => update("postal_code", e.target.value)}
+          />
+          {errors.postal_code && <p className="mt-1 text-xs text-red-600">{errors.postal_code}</p>}
+        </div>
       </fieldset>
 
       <fieldset className="space-y-4">

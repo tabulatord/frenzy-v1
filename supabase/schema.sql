@@ -18,9 +18,9 @@ create table if not exists public.pre_registrations (
   -- Location (kept as separate fields, never a single free-text string)
   country_code text not null,
   country_name text not null,
-  region text,
+  region text not null,
   city text not null,
-  postal_code text,
+  postal_code text not null,
 
   -- Pickleball
   rating text not null,
@@ -33,6 +33,10 @@ create table if not exists public.pre_registrations (
   -- Consent
   consent_terms boolean not null,
   consent_marketing boolean not null default false,
+
+  -- Minors (declarative only — no document upload/verification in V1)
+  guardian_email text,
+  guardian_consent boolean not null default false,
 
   -- Attribution
   utm_source text,

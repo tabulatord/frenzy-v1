@@ -13,6 +13,8 @@ export type DisciplineValue = (typeof DISCIPLINES)[number]["value"];
 
 export const GENDERS = ["Male", "Female", "Non-binary", "Prefer not to say"] as const;
 
+export const MINOR_AGE_CUTOFF = 18;
+
 export type RegistrationPayload = {
   first_name: string;
   last_name: string;
@@ -33,6 +35,8 @@ export type RegistrationPayload = {
   location_not_listed: boolean;
   consent_terms: boolean;
   consent_marketing: boolean;
+  guardian_email: string;
+  guardian_consent: boolean;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -43,6 +47,20 @@ export type RegistrationPayload = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Loose E.164-ish check: a leading "+", a country code, then the rest of
+// the number — deliberately not a strict per-country validator.
+const PHONE_RE = /^\+[1-9]\d{6,14}$/;
+
+export function computeAge(dateOfBirth: string): number {
+  const dob = new Date(dateOfBirth);
+  return (Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+}
+
+export function isMinor(dateOfBirth: string): boolean {
+  if (!dateOfBirth) return false;
+  const age = computeAge(dateOfBirth);
+  return !Number.isNaN(age) && age < MINOR_AGE_CUTOFF;
+}
 
 export type ValidationResult = { valid: true } | { valid: false; errors: Record<string, string> };
 
@@ -54,14 +72,17 @@ export function validateRegistration(data: RegistrationPayload): ValidationResul
   if (!data.email?.trim() || !EMAIL_RE.test(data.email.trim())) {
     errors.email = "A valid email is required.";
   }
-  if (!data.phone?.trim()) errors.phone = "Phone / WhatsApp is required.";
+  if (!data.phone?.trim() || !PHONE_RE.test(data.phone.trim().replace(/[\s()-]/g, ""))) {
+    errors.phone = "Enter a valid phone number with country code (e.g. +1 555 123 4567).";
+  }
 
+  let age: number | null = null;
   if (!data.date_of_birth) {
     errors.date_of_birth = "Date of birth is required.";
   } else {
     const dob = new Date(data.date_of_birth);
-    const age = (Date.now() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-    if (Number.isNaN(dob.getTime()) || age < 8 || age > 100) {
+    age = computeAge(data.date_of_birth);
+    if (Number.isNaN(dob.getTime()) || age < 5 || age > 100) {
       errors.date_of_birth = "Enter a valid date of birth.";
     }
   }
@@ -70,6 +91,8 @@ export function validateRegistration(data: RegistrationPayload): ValidationResul
   if (!data.country_code?.trim()) errors.country_code = "Please select a country.";
   if (!data.country_name?.trim()) errors.country_code = "Please select a country.";
   if (!data.city?.trim()) errors.city = "City is required.";
+  if (!data.region?.trim()) errors.region = "State / region is required.";
+  if (!data.postal_code?.trim()) errors.postal_code = "Postal code is required.";
 
   if (!RATINGS.includes(data.rating as Rating)) errors.rating = "Please select your level.";
 
@@ -89,6 +112,15 @@ export function validateRegistration(data: RegistrationPayload): ValidationResul
 
   if (!data.consent_terms) {
     errors.consent_terms = "You must accept the pre-registration terms to continue.";
+  }
+
+  if (age !== null && !Number.isNaN(age) && age < MINOR_AGE_CUTOFF) {
+    if (!data.guardian_email?.trim() || !EMAIL_RE.test(data.guardian_email.trim())) {
+      errors.guardian_email = "A valid parent/guardian email is required for players under 18.";
+    }
+    if (!data.guardian_consent) {
+      errors.guardian_consent = "Parent/guardian authorization is required for players under 18.";
+    }
   }
 
   if (data.website && data.website.trim() !== "") {
